@@ -1,11 +1,14 @@
 from datasets import load_dataset
 from torch.utils.data import Dataset
+import torch
 import pandas as pd
 import re
+import numpy as np
 
 
 class MultiEurlexDataset(Dataset):
-    def __init__(self, split='train', languages=[]):
+    def __init__(self, split='train', languages=[], tokenizer=lambda x: x, num_labels=21):
+        self.num_labels = num_labels
         dataset = load_dataset('multi_eurlex', 'all_languages')
         dataset_dict = {'celex_id': [],
                         'lang': [],
@@ -25,7 +28,7 @@ class MultiEurlexDataset(Dataset):
             step = int(len(dataset[split]) / 10)
             if idx % step == 0:
                 percentage = idx / len(dataset[split]) * 100
-                print(f'{percentage:.4f}% of dataset loaded')
+                print(f'{percentage:.1f}% of dataset loaded')
             for lang in instance['text'].keys():
                 if not len(languages) or lang in languages:
                     if instance['text'][lang]:
@@ -33,20 +36,25 @@ class MultiEurlexDataset(Dataset):
                         instance['text'][lang] = regex2.sub(' ', instance['text'][lang])
                         instance['text'][lang] = regex3.sub('.', instance['text'][lang])
 
-                        dataset_dict['celex_id'].append(instance['celex_id'])
-                        dataset_dict['lang'].append(lang)
                         dataset_dict['labels'].append(instance['labels'])
                         dataset_dict['document'].append(instance['text'][lang])
-
-        flat_dataset = pd.DataFrame.from_dict(dataset_dict)
-        self.data = flat_dataset
+        self.encodings = tokenizer(dataset_dict['document'], padding=True, truncation=True)
+        self.labels = dataset_dict['labels']
         self.languages = languages
+        print("Loading dataset done")
 
     def __len__(self):
-        return len(self.data)
+        return len(self.labels)
 
     def __getitem__(self, idx):
-        return self.data.loc[idx, 'document'], self.data.loc[idx, 'labels']
+        item = {key: torch.tensor(val[idx]) for key, val in self.encodings.items()}
+        item['labels'] = torch.tensor(self.multihot_encode(self.labels[idx]))
+        return item
+
+    def multihot_encode(self,labels):
+        elems = np.zeros(self.num_labels)
+        elems[labels] = 1
+        return elems
 
 # dataset = MultiEurlexDataset()
 # print(dataset.data)
