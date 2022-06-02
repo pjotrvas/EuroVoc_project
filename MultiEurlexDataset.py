@@ -1,3 +1,4 @@
+from sys import maxsize
 from datasets import load_dataset
 from torch.utils.data import Dataset
 import torch
@@ -38,7 +39,8 @@ class MultiEurlexDataset(Dataset):
 
                         dataset_dict['labels'].append(instance['labels'])
                         dataset_dict['document'].append(instance['text'][lang])
-        self.encodings = tokenizer(dataset_dict['document'], padding=True, truncation=True)
+        self.tokenizer = tokenizer
+        self.texts = dataset_dict['document']
         self.labels = dataset_dict['labels']
         self.languages = languages
         print("Loading dataset done")
@@ -47,7 +49,8 @@ class MultiEurlexDataset(Dataset):
         return len(self.labels)
 
     def __getitem__(self, idx):
-        item = {key: torch.tensor(val[idx]) for key, val in self.encodings.items()}
+        self.encodings = self.tokenizer(self.texts[idx],  truncation=True, max_length=512)
+        item = {key: torch.tensor(val) for key, val in self.encodings.items()}
         item['labels'] = torch.tensor(self.multihot_encode(self.labels[idx]))
         return item
 

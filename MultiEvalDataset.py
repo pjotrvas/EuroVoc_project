@@ -4,7 +4,7 @@ import pandas as pd
 import re
 
 
-class MultiEurlexDataset(Dataset):
+class MultiEvalDataset(Dataset):
     def __init__(self, split='train', languages=[]):
         dataset = load_dataset('multi_eurlex', 'all_languages')
         dataset_dict = {'celex_id': [],
