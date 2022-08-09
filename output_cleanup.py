@@ -1,8 +1,8 @@
 import pandas as pd
-
+import sys
 
 def main():
-    out_file_path = input()
+    out_file_path = sys.argv[1]
 
     results_training = {}
     results_eval = {}
@@ -27,8 +27,8 @@ def main():
 
         df_training = pd.DataFrame.from_dict(results_training)
         df_eval = pd.DataFrame.from_dict(results_eval)
-        df_training.to_csv(f'./csv_logs/{out_file_path}_train.csv')
-        df_eval.to_csv(f'./csv_logs/{out_file_path}_eval.csv')
+        df_training.to_csv(f'./csv_logs/{out_file_path.split("/")[1]}_train.csv')
+        df_eval.to_csv(f'./csv_logs/{out_file_path.split("/")[1]}_eval.csv')
 
 
 main()

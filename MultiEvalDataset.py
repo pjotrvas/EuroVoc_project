@@ -29,7 +29,7 @@ class MultiEvalDataset(Dataset):
             for lang in instance['text'].keys():
                 if not len(languages) or lang in languages:
                     if instance['text'][lang]:
-                        instance['text'][lang] = regex1.sub('', instance['text'][lang])
+                        #instance['text'][lang] = regex1.sub('', instance['text'][lang])
                         instance['text'][lang] = regex2.sub(' ', instance['text'][lang])
                         instance['text'][lang] = regex3.sub('.', instance['text'][lang])
 

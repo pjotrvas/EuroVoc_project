@@ -1,0 +1,40 @@
+Traceback (most recent call last):
+  File "run_training.py", line 19, in <module>
+    tokenizer = XLMRobertaTokenizerFast.from_pretrained('xlm-roberta-base', padding=True, trunaction=True)
+  File "/home/mrajnovic/miniconda3/envs/tar/lib/python3.8/site-packages/transformers/tokenization_utils_base.py", line 1719, in from_pretrained
+    resolved_vocab_files[file_id] = cached_path(
+  File "/home/mrajnovic/miniconda3/envs/tar/lib/python3.8/site-packages/transformers/utils/hub.py", line 282, in cached_path
+    output_path = get_from_cache(
+  File "/home/mrajnovic/miniconda3/envs/tar/lib/python3.8/site-packages/transformers/utils/hub.py", line 485, in get_from_cache
+    r = requests.head(url, headers=headers, allow_redirects=False, proxies=proxies, timeout=etag_timeout)
+  File "/home/mrajnovic/miniconda3/envs/tar/lib/python3.8/site-packages/requests/api.py", line 102, in head
+    return request('head', url, **kwargs)
+  File "/home/mrajnovic/miniconda3/envs/tar/lib/python3.8/site-packages/requests/api.py", line 61, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "/home/mrajnovic/miniconda3/envs/tar/lib/python3.8/site-packages/requests/sessions.py", line 529, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/home/mrajnovic/miniconda3/envs/tar/lib/python3.8/site-packages/requests/sessions.py", line 645, in send
+    r = adapter.send(request, **kwargs)
+  File "/home/mrajnovic/miniconda3/envs/tar/lib/python3.8/site-packages/requests/adapters.py", line 440, in send
+    resp = conn.urlopen(
+  File "/home/mrajnovic/miniconda3/envs/tar/lib/python3.8/site-packages/urllib3/connectionpool.py", line 703, in urlopen
+    httplib_response = self._make_request(
+  File "/home/mrajnovic/miniconda3/envs/tar/lib/python3.8/site-packages/urllib3/connectionpool.py", line 386, in _make_request
+    self._validate_conn(conn)
+  File "/home/mrajnovic/miniconda3/envs/tar/lib/python3.8/site-packages/urllib3/connectionpool.py", line 1040, in _validate_conn
+    conn.connect()
+  File "/home/mrajnovic/miniconda3/envs/tar/lib/python3.8/site-packages/urllib3/connection.py", line 416, in connect
+    self.sock = ssl_wrap_socket(
+  File "/home/mrajnovic/miniconda3/envs/tar/lib/python3.8/site-packages/urllib3/util/ssl_.py", line 449, in ssl_wrap_socket
+    ssl_sock = _ssl_wrap_socket_impl(
+  File "/home/mrajnovic/miniconda3/envs/tar/lib/python3.8/site-packages/urllib3/util/ssl_.py", line 493, in _ssl_wrap_socket_impl
+    return ssl_context.wrap_socket(sock, server_hostname=server_hostname)
+  File "/home/mrajnovic/miniconda3/envs/tar/lib/python3.8/ssl.py", line 500, in wrap_socket
+    return self.sslsocket_class._create(
+  File "/home/mrajnovic/miniconda3/envs/tar/lib/python3.8/ssl.py", line 1040, in _create
+    self.do_handshake()
+  File "/home/mrajnovic/miniconda3/envs/tar/lib/python3.8/ssl.py", line 1309, in do_handshake
+    self._sslobj.do_handshake()
+KeyboardInterrupt
+Reusing dataset multi_eurlex (/home/mrajnovic/.cache/huggingface/datasets/multi_eurlex/all_languages/1.0.0/8ec8b79877a517369a143ead6679d1788d13e51cf641ed29772f4449e8364fb6)
+  0%|          | 0/3 [00:00<?, ?it/s]100%|██████████| 3/3 [00:00<00:00, 871.15it/s]

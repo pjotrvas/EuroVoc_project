@@ -27,10 +27,11 @@ uralic = ['hu', 'fi', 'et']
 baltic = ['lt', 'lv']
 semitic = ['mt']
 croatian = ['hr']
+slavic_croatian = ['pl', 'cs', 'bg', 'sk', 'sl', 'hr']
 
 device='cuda' if torch.cuda.is_available() else 'cpu'
 tokenizer = XLMRobertaTokenizerFast.from_pretrained('xlm-roberta-base', padding=True, trunaction=True)
-training_dataset = MultiEurlexDataset(languages = croatian, tokenizer=tokenizer)
+training_dataset = MultiEurlexDataset(languages = slavic_croatian, tokenizer=tokenizer)
 eval_dataset = MultiEurlexDataset(split='validation',languages = ['hr'], tokenizer=tokenizer)
 test_dataset = MultiEurlexDataset(split='test',languages = ['hr'], tokenizer=tokenizer)
 
@@ -49,8 +50,8 @@ def compute_metrics(eval_pred):
     return result
 
 training_args = TrainingArguments(
-    output_dir='./results/croatian_10',          # output directory
-    num_train_epochs=10,              # total number of training epochs
+    output_dir='./results/slavic_croatian',          # output directory
+    num_train_epochs=5,              # total number of training epochs
     per_device_train_batch_size=8,  # batch size per device during training
     per_device_eval_batch_size=16,   # batch size for evaluation
     warmup_ratio=0.1,                # number of warmup steps for learning rate scheduler
