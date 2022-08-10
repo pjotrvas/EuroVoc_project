@@ -18,7 +18,7 @@ logging.basicConfig(level=logging.DEBUG)
 transformers.logging.set_verbosity_debug()
 
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"   # see issue #152
-os.environ["CUDA_VISIBLE_DEVICES"]="1"
+os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
 ## set seeds
 seeds = [7, 13, 42]
