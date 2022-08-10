@@ -18,7 +18,7 @@ logging.basicConfig(level=logging.DEBUG)
 transformers.logging.set_verbosity_debug()
 
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"   # see issue #152
-os.environ["CUDA_VISIBLE_DEVICES"]="1"
+os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
 ## set seeds
 seeds = [7, 13, 42]
@@ -27,6 +27,9 @@ languages_dict_train = {
     'germanic': ['en', 'de', 'nl', 'sv', 'da'],
     'romance': ['fr', 'it', 'es', 'ro', 'pt'],
     'slavic': ['pl', 'cs', 'bg', 'sk', 'sl', 'hr'],
+    'germanic_': ['en', 'de', 'nl', 'da'],
+    'romance_': ['fr', 'it', 'es', 'pt'],
+    'slavic_': ['pl', 'cs', 'bg', 'sk', 'sl'],
     'greek': ['el'],
     'uralic': ['hu', 'fi', 'et'],
     'baltic': ['lt', 'lv'],
@@ -34,9 +37,9 @@ languages_dict_train = {
 }
 
 languages_dict_test = {
+    'slavic': ['hr'],
     'germanic': ['sv'],
     'romance': ['ro'],
-    'slavic': ['hr']
 }
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -58,17 +61,20 @@ def compute_metrics(eval_pred):
     return result
 
 
-
-
 for group_target, target in languages_dict_test.items():
-    
-    eval_dataset = MultiEurlexDataset(split='validation',languages=target, tokenizer=tokenizer)
-    test_dataset = MultiEurlexDataset(split='test',languages=target, tokenizer=tokenizer)
+    print(target)
+    eval_dataset = MultiEurlexDataset(split='validation', languages=target, tokenizer=tokenizer)
+    test_dataset = MultiEurlexDataset(split='test', languages=target, tokenizer=tokenizer)
     
     for group, langs in languages_dict_train.items():
+
+        if '_' in group and group_target not in group:
+            continue
+        
         training_dataset = MultiEurlexDataset(languages=langs, tokenizer=tokenizer)
 
         for seed in seeds:
+            print(f'target: {target[0]}, group: {group}, seed: {seed}')
             torch.manual_seed(seed)
             random.seed(seed)
             np.random.seed(seed)
@@ -108,4 +114,8 @@ for group_target, target in languages_dict_test.items():
             )
 
             trainer.train()
-            print(trainer.predict(test_dataset), file='out.out')
+            
+            path = os.path.join('logs2', f'{target[0]}_{group}_{seed}.out')
+
+            with open(path, 'w') as f:
+                f.write(trainer.predict(test_dataset))
